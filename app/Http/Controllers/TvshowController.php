@@ -44,12 +44,44 @@ class TvshowController extends Controller
     }
 
     /**
-     * Search by name or genre (POST).
+     * Search TV shows by name.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function search(Request $request)
+    {
+        // String query
+        $query = $request->q;
+        $tvshows = Tvshow::query()->where('name', 'LIKE', "%{$query}%")->get();
+
+        if (! count($tvshows)) {
+            return response()->json([
+                'message' => 'No search results found.',
+            ]);
+        }
+
+        $data = [];
+        foreach ($tvshows as $tvshow) {
+            array_push($data, [
+                'id' => $tvshow->id,
+                'tvshow' => $tvshow->name,
+                'genre' => $tvshow->genre,
+                'seasons' => count($tvshow->seasons),
+                'actors' => $tvshow->actors,
+            ]);
+        }
+
+        return response()->json($data);
+    }
+
+    /**
+     * Filter by name or genre.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function filter(Request $request)
     {
         // Define type of filtering
         $filter_by = $request->filter_by;

@@ -39,8 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tvshows', [TvshowController::class, 'index']);
     Route::get('/tvshows/{tvshow}', [TvshowController::class, 'show']);
     Route::post('/tvshows', [TvshowController::class, 'store']);
-    Route::post('/tvshows/actor', [TvshowController::class, 'attach']);
-    Route::post('/tvshows/search', [TvshowController::class, 'search']);
+    Route::post('/tvshows/filter', [TvshowController::class, 'filter']);
+    Route::get('/tvshows/search/{q}', [TvshowController::class, 'search']);
     // Seasons
     Route::get('/seasons/{season}', [SeasonController::class, 'show']);
     Route::post('/seasons', [SeasonController::class, 'store']);
