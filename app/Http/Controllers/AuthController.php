@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -23,7 +22,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
         ]);
         // Access denied
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 401);
         }
 
@@ -83,7 +82,7 @@ class AuthController extends Controller
 
         // Return data
         return response()->json([
-            'message' => $user->name . ' has a new token.',
+            'message' => $user->name.' has a new token.',
             'access_token' => $token,
             'token_type' => 'Bearer',
         ]);

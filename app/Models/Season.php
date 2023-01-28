@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Movie extends Model
+class Season extends Model
 {
     use HasFactory;
 
     protected $hidden = ['pivot'];
 
-    public function actors()
+    public function episodes()
     {
-        return $this->belongsToMany(Actor::class, 'movies_actors')->select('name');
+        return $this->belongsToMany(Episode::class, 'seasons_episodes')->select('number', 'name');
     }
 }

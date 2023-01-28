@@ -14,17 +14,9 @@ class DirectorController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $directors = Director::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($directors);
     }
 
     /**
@@ -35,51 +27,25 @@ class DirectorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $director = new Director;
+        $director->name = $request->name;
+        $director->save();
+        $data = [
+            'message' => 'Director added.',
+            'director' => $director,
+        ];
+
+        return response()->json($data);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Director  $director
+     * @param  \App\Models\Director  $actor
      * @return \Illuminate\Http\Response
      */
     public function show(Director $director)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Director  $director
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Director $director)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Director  $director
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Director $director)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Director  $director
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Director $director)
-    {
-        //
+        return response()->json($director);
     }
 }

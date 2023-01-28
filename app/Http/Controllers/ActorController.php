@@ -15,6 +15,7 @@ class ActorController extends Controller
     public function index()
     {
         $actors = Actor::all();
+
         return response()->json($actors);
     }
 
@@ -31,8 +32,9 @@ class ActorController extends Controller
         $actor->save();
         $data = [
             'message' => 'Actor added.',
-            'actor' => $actor
+            'actor' => $actor,
         ];
+
         return response()->json($data);
     }
 
@@ -45,16 +47,5 @@ class ActorController extends Controller
     public function show(Actor $actor)
     {
         return response()->json($actor);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Actor  $actor
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Actor $actor)
-    {
-        //
     }
 }

@@ -1,9 +1,12 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ActorController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\EpisodeController;
+use App\Http\Controllers\MovieController;
+use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\TvshowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,28 +20,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-// Exposed rutes
+// Exposed endpoints
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-
-// Mover hacia abajo #######################################################
-// Movies
-Route::get('/movies', [MovieController::class, 'index']);
-Route::get('/movies/{movie}', [MovieController::class, 'show']);
-Route::post('/movies', [MovieController::class, 'store']);
-Route::post('/movies/actor', [MovieController::class, 'attach']);
-// Actors
-Route::get('/actors', [ActorController::class, 'index']);
-Route::get('/actors/{actor}', [ActorController::class, 'show']);
-Route::post('/actors', [ActorController::class, 'store']);
-
-// Authenticated routes
+// Authenticated endpoints
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/refresh', [AuthController::class, 'refresh']);
     Route::get('/logout', [AuthController::class, 'logout']);
+    // Movies
+    Route::get('/movies', [MovieController::class, 'index']);
+    Route::get('/movies/{movie}', [MovieController::class, 'show']);
+    Route::post('/movies', [MovieController::class, 'store']);
+    Route::post('/movies/actor', [MovieController::class, 'attach']);
+    Route::post('/movies/search', [MovieController::class, 'search']);
+    // TV Shows
+    Route::get('/tvshows', [TvshowController::class, 'index']);
+    Route::get('/tvshows/{tvshow}', [TvshowController::class, 'show']);
+    Route::post('/tvshows', [TvshowController::class, 'store']);
+    Route::post('/tvshows/actor', [TvshowController::class, 'attach']);
+    Route::post('/tvshows/search', [TvshowController::class, 'search']);
+    // Seasons
+    Route::get('/seasons', [SeasonController::class, 'index']);
+    Route::get('/seasons/{season}', [SeasonController::class, 'show']);
+    Route::post('/seasons', [SeasonController::class, 'store']);
+    // Episodes
+    Route::get('/episodes', [EpisodeController::class, 'index']);
+    Route::get('/episodes/{episode}', [EpisodeController::class, 'show']);
+    Route::post('/episodes', [EpisodeController::class, 'store']);
+    // Actors
+    Route::get('/actors', [ActorController::class, 'index']);
+    Route::get('/actors/{actor}', [ActorController::class, 'show']);
+    Route::post('/actors', [ActorController::class, 'store']);
+    // Directors
+    Route::get('/directors', [DirectorController::class, 'index']);
+    Route::get('/directors/{director}', [DirectorController::class, 'show']);
+    Route::post('/directors', [DirectorController::class, 'store']);
 });

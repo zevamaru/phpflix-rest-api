@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Movie;
-use App\Models\Director;
 use App\Models\Actor;
+use App\Models\Director;
+use App\Models\Movie;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller
@@ -17,7 +17,60 @@ class MovieController extends Controller
     public function index()
     {
         $movies = Movie::all();
-        return response()->json($movies);
+
+        $data = [];
+        foreach ($movies as $movie) {
+            $director = Director::find($movie->director_id);
+            array_push($data, [
+                'id' => $movie->id,
+                'movie' => $movie->name,
+                'genre' => $movie->genre,
+                'movie' => $movie->name,
+                'director' => $director->name,
+                'actors' => $movie->actors,
+            ]);
+        }
+
+        return response()->json($data);
+    }
+
+    /**
+     * Search by name or genre (POST).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        // Define type of filtering
+        $filter_by = $request->filter_by;
+        // String query
+        $search = $request->search;
+
+        if ($filter_by === 'name' || $filter_by === 'genre') {
+            $movies = Movie::query()->where($filter_by, 'LIKE', "%{$search}%")->get();
+        }
+
+        if (! count($movies)) {
+            return response()->json([
+                'message' => 'No search results found.',
+            ]);
+        }
+
+        $data = [];
+        foreach ($movies as $movie) {
+            $director = Director::find($movie->director_id);
+            array_push($data, [
+                'id' => $movie->id,
+                'movie' => $movie->name,
+                'genre' => $movie->genre,
+                'movie' => $movie->name,
+                'director' => $director->name,
+                'actors' => $movie->actors,
+            ]);
+        }
+
+        return response()->json($data);
     }
 
     /**
@@ -32,12 +85,13 @@ class MovieController extends Controller
         $movie->name = $request->name;
         $movie->genre = $request->genre;
         $movie->director_id = $request->director_id;
-        $director = Director::find($request->director_id);
         $movie->save();
+        $director = Director::find($request->director_id);
         $data = [
             'message' => 'Movie added: '.$movie->name.' directed by '.$director->name,
-            'movie' => $movie
+            'movie' => $movie,
         ];
+
         return response()->json($data);
     }
 
@@ -49,15 +103,20 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
+        $director = Director::find($movie->director_id);
+
         $data = [
-            'movie' => $movie,
-            'actors' => $movie->actors
+            'movie' => $movie->name,
+            'genre' => $movie->genre,
+            'director' => $director->name,
+            'actors' => $movie->actors,
         ];
+
         return response()->json($data);
     }
 
     /**
-     * Attach to a specified resource.
+     * Attach an actor to a movie.
      *
      * @param  \Illuminate\Http\Request  $request
      */
@@ -66,8 +125,9 @@ class MovieController extends Controller
         $movie = Movie::find($request->movie_id);
         $actor = Actor::find($request->actor_id);
         $movie->actors()->attach($request->actor_id);
+
         return response()->json([
-            'message' => 'Actor '.$actor->name.' added to movie '.$movie->name.'.'
+            'message' => 'Actor '.$actor->name.' added to movie '.$movie->name.'.',
         ]);
     }
 }
