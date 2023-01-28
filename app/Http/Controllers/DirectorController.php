@@ -14,7 +14,7 @@ class DirectorController extends Controller
      */
     public function index()
     {
-        $directors = Director::all();
+        $directors = Director::all('id', 'name');
 
         return response()->json($directors);
     }

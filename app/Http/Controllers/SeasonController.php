@@ -9,26 +9,6 @@ use Illuminate\Http\Request;
 class SeasonController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $seasons = Season::all();
-
-        $data = [];
-        foreach ($seasons as $season) {
-            array_push($data, [
-                'season' => $season->number,
-                'episodes' => $season->episodes,
-            ]);
-        }
-
-        return response()->json($data);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

@@ -20,11 +20,23 @@ class TvshowController extends Controller
 
         $data = [];
         foreach ($tvshows as $tvshow) {
+            // Get all seasons of this TV Show
+            $seasons_from_tvshow = Season::where('tvshow_id', $tvshow->id)->get();
+            // Array to show seasons with their episodes
+            $seasons = [];
+            foreach ($seasons_from_tvshow as $season) {
+                array_push($seasons, [
+                    'season' => $season->number,
+                    'episodes' => $season->episodes,
+                ]);
+            }
+            // Data
             array_push($data, [
                 'id' => $tvshow->id,
                 'tvshow' => $tvshow->name,
                 'genre' => $tvshow->genre,
-                'seasons' => count($tvshow->seasons),
+                'seasons' => $seasons,
+                'actors' => $tvshow->actors,
             ]);
         }
 
@@ -61,6 +73,7 @@ class TvshowController extends Controller
                 'tvshow' => $tvshow->name,
                 'genre' => $tvshow->genre,
                 'seasons' => count($tvshow->seasons),
+                'actors' => $tvshow->actors,
             ]);
         }
 

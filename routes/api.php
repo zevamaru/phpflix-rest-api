@@ -33,7 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/movies/{movie}', [MovieController::class, 'show']);
     Route::post('/movies', [MovieController::class, 'store']);
     Route::post('/movies/actor', [MovieController::class, 'attach']);
-    Route::post('/movies/search', [MovieController::class, 'search']);
+    Route::post('/movies/filter', [MovieController::class, 'filter']);
+    Route::get('/movies/search/{q}', [MovieController::class, 'search']);
     // TV Shows
     Route::get('/tvshows', [TvshowController::class, 'index']);
     Route::get('/tvshows/{tvshow}', [TvshowController::class, 'show']);
@@ -41,7 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tvshows/actor', [TvshowController::class, 'attach']);
     Route::post('/tvshows/search', [TvshowController::class, 'search']);
     // Seasons
-    Route::get('/seasons', [SeasonController::class, 'index']);
     Route::get('/seasons/{season}', [SeasonController::class, 'show']);
     Route::post('/seasons', [SeasonController::class, 'store']);
     // Episodes

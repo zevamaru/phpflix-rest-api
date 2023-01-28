@@ -35,12 +35,46 @@ class MovieController extends Controller
     }
 
     /**
-     * Search by name or genre (POST).
+     * Search movies by name.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function search(Request $request)
+    {
+        // String query
+        $query = $request->q;
+        $movies = Movie::query()->where('name', 'LIKE', "%{$query}%")->get();
+
+        if (! count($movies)) {
+            return response()->json([
+                'message' => 'No search results found.',
+            ]);
+        }
+
+        $data = [];
+        foreach ($movies as $movie) {
+            $director = Director::find($movie->director_id);
+            array_push($data, [
+                'id' => $movie->id,
+                'movie' => $movie->name,
+                'genre' => $movie->genre,
+                'movie' => $movie->name,
+                'director' => $director->name,
+                'actors' => $movie->actors,
+            ]);
+        }
+
+        return response()->json($data);
+    }
+
+    /**
+     * Filter by name or genre (POST).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function filter(Request $request)
     {
         // Define type of filtering
         $filter_by = $request->filter_by;
