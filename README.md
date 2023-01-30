@@ -175,5 +175,5 @@ Although I've worked with APIs before this is my first time designing an API fro
 ### Object Relational Mapping
 First time working with an ORM, and I'm really excited to have added this knowledge to my skillset. It makes a more fluid interactiong with database, and combined with [Seeding](https://laravel.com/docs/9.x/seeding), it allows me to design and setup a database environment very easily and quickly. 
 
-### Ubuntu (WSL2)
+### Linux (WSL2)
 I had to install an Ubuntu terminal (22.04) on my Windows machine in order to work with Laravel Sail and Docker, and use a bunch of commands to navigate and configure the environment.
