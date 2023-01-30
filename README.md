@@ -1,66 +1,179 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PHPflix REST API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project started as a [challenge](https://github.com/improvein/dev-challenge/tree/master/backend-php) for a job interview, and despite that I knew I was lacking some knowledge to do it, I decided to try hard, and I ended up [learning a LOT](#what-i-learned-with-this-little-project-) in the process.
 
-## About Laravel
+## Steps for testing
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Configure your envoriroment file, or rename .env.example to .env
+- Run the Docker container with `./vendor/bin/sail up -d` (Linux or Mac)
+- Run `php artisan migrate:fresh --seed` to migrate all tables and seeders for testing
+- Use [Postman](https://www.postman.com/) or your preferred software for API testing
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+You can enter `localhost:8001` to access phpMyAdmin and see how database works.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Endpoints
 
-## Learning Laravel
+### Exposed endpoints:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- `/api/register/` `POST` (name, email, password)
+```json
+{
+    "user": [{user}],
+    "access_token": "{token}",
+    "token_type": "Bearer"
+}
+```
+- `/api/login/` `POST` (email, password)
+```json
+{
+    "message": "Welcome {name}",
+    "access_token": "{token}",
+    "token_type": "Bearer"
+}
+```
+	  
+### Authenticated endpoints:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+In order to access these endpoints, you need add an authorization header (Bearer Token) with the token recieved at `/api/login/`. Please note that the token will expire after 15 minutes.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- `/api/logout/` `GET`
+```json
+{
+    "message": "Token successfully destroyed for {name}.",
+}
+```
+- `/api/refresh/` `GET`
+```json
+{
+    "message": "{name} has a new token.",
+    "access_token": "{token}",
+    "token_type": "Bearer"
+}
+```
 
-## Laravel Sponsors
+#### Movie endpoints
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- `/api/movies/{movie_id}/` `GET` returns data of a movie
+```json
+{
+    "id": "{id}",
+    "movie": "{name}",
+    "genre": "{genre}",
+    "director": "{director_name}",
+    "actors": [{movie_actors}]
+}
+```
+- `/api/movies/` `GET` returns all movies
+- `/api/movies/search/{q}` `GET` returns movies matching the query with name
+- `/api/movies/filter/` `POST` (filter, q) returns movies matching the query with name or genre
+- `/api/movies/` `POST` (name, genre, director_id) add a new movie
+```json
+{
+    "message": "Movie added: {name} directed by {director_name}",
+    "movie": [{movie}]
+}
+```
+- `/api/movies/actor/` `POST` (movie_id, actor_id) attach an actor to a movie
+```json
+{
+    "message": "Actor {actor_name} added to movie {movie_name}.",
+    "actor": [{actor}]
+}
+```
 
-### Premium Partners
+#### TV show endpoints
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- `/api/tvshows/{tvshow_id}/` `GET` returns data of a TV show
+```json
+{
+    "id": "{id}",
+    "tvshow": "{name}",
+    "genre": "{genre}",
+    "seasons": [{seasons}],
+    "actors": [{tvshow_actors}]
+}
+```
+- `/api/tvshows/` `GET` returns all TV shows
+- `/api/tvshows/search/{q}` `GET` returns TV shows matching the query with name
+- `/api/tvshows/filter/` `POST: (filter, q) returns TV shows matching the query with name or genre
+- `/api/tvshows/` `POST` (name, genre, director_id) add a new TV show
+- `/api/tvshows/actor/` `POST` (tvshow_id, actor_id) attach an actor to a TV show
+```json
+{
+    "message": "Actor {actor_name} added to the TV show {tvshow_name}.",
+    "actor": [{actor}]
+}
+```
+- `/api/seasons/{season_id}/` `GET` returns all episodes of a season
+```json
+{
+    "season": "{number}",
+    "tvshow": "{name}",
+    "episodes": "[{season_episodes}]"
+}
+```
+- `/api/seasons/` `POST` (number, tvshow_id) adds a number of seasons to a TV show
+```json
+{
+    "message": "{number} seasons added to {tvshow_name}."
+}
+```
+- `/api/episodes/{episode_id}/` `GET` returns data of a episode
+```json
+{
+    "number": "{number}",
+    "name": "{name}",
+    "season": "{season_number}",
+    "tvshow": "{tvshow_name}",
+    "director": "{tvshow_name}"
+}
+```
+- `/api/episodes/` `POST` (name, number, season_id) adds an episode to a season
+```json
+{
+    "message": "Episode {number}. {name} added to {tvshow_name} (Season {season_number})"
+}
+```
 
-## Contributing
+#### Actor endpoints
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- `/api/actors/` `GET` returns all actors
+```json
+{
+    "id": "{id}",
+    "name": "{name}",
+}
+```
+- `/api/actors/` `POST` (name) add a new actor
 
-## Code of Conduct
+#### Director endpoints
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- `/api/directors/` `GET` returns all directors
+```json
+{
+    "id": "{id}",
+    "name": "{name}",
+}
+```
+- `/api/directors/` `POST` (name) add a new director
 
-## Security Vulnerabilities
+  
+## What I learned with this little project ☝
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Laravel
+I have never used Laravel before, and I'm impressed with its power and its number of built-in tools. For this project I use:
 
-## License
+- [Sanctum](https://laravel.com/docs/9.x/sanctum): Provides an authentication system for token based APIs. Pretty powerful and easy to configure.
+- [Eloquent](https://laravel.com/docs/9.x/eloquent): An ORM to interact with database. I didn't have to write a single line of SQL on this project, which is awesome.
+- [Sail](https://laravel.com/docs/9.x/sail): A command-line interface for interacting with Docker. I have set up a container with PHP, MySQL and phpMyAdmin.
+- [Artisan](https://laravel.com/docs/9.x/artisan): A command-line interface to assist me while I build the application.
+- [Pint](https://laravel.com/docs/9.x/pint): A linting to ensure that my code style stays clean and consistent.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### REST API architecture
+Although I've worked with APIs before this is my first time designing an API from scratch.
+
+### Object Relational Mapping
+First time working with an ORM, and I'm really excited to have added this knowledge to my skillset. It makes a more fluid interactiong with database, and combined with [Seeding](https://laravel.com/docs/9.x/seeding), it allows me to design and setup a database environment very easily and quickly. 
+
+### Ubuntu (WSL2)
+I had to install an Ubuntu terminal (22.04) on my Windows machine in order to work with Laravel Sail and Docker, and use a bunch of commands to navigate and configure the environment.
