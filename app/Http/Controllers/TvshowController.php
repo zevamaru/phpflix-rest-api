@@ -176,6 +176,7 @@ class TvshowController extends Controller
 
         return response()->json([
             'message' => 'Actor '.$actor->name.' added to the TV show '.$tvshow->name.'.',
+            'actor' => $actor
         ]);
     }
 }

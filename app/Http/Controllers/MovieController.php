@@ -25,7 +25,6 @@ class MovieController extends Controller
                 'id' => $movie->id,
                 'movie' => $movie->name,
                 'genre' => $movie->genre,
-                'movie' => $movie->name,
                 'director' => $director->name,
                 'actors' => $movie->actors,
             ]);
@@ -59,7 +58,6 @@ class MovieController extends Controller
                 'id' => $movie->id,
                 'movie' => $movie->name,
                 'genre' => $movie->genre,
-                'movie' => $movie->name,
                 'director' => $director->name,
                 'actors' => $movie->actors,
             ]);
@@ -98,7 +96,6 @@ class MovieController extends Controller
                 'id' => $movie->id,
                 'movie' => $movie->name,
                 'genre' => $movie->genre,
-                'movie' => $movie->name,
                 'director' => $director->name,
                 'actors' => $movie->actors,
             ]);
@@ -162,6 +159,7 @@ class MovieController extends Controller
 
         return response()->json([
             'message' => 'Actor '.$actor->name.' added to movie '.$movie->name.'.',
+            'actor' => $actor
         ]);
     }
 }
