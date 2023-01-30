@@ -1,6 +1,6 @@
 # PHPflix REST API
 
-This project started as a [challenge](https://github.com/improvein/dev-challenge/tree/master/backend-php) for a job interview, and despite that I knew I was lacking some knowledge to do it, I decided to try hard, and I ended up [learning a LOT](#what-i-learned-with-this-little-project-) in the process.
+This project started as a [challenge](https://github.com/improvein/dev-challenge/tree/master/backend-php) for a job interview, and despite that I knew I was lacking some knowledge to do it, I decided to try hard, and I ended up [learning a LOT](#what-i-learned-with-this-little-project) in the process.
 
 ## Steps for testing
 
@@ -158,7 +158,7 @@ In order to access these endpoints, you need add an authorization header (Bearer
 - `/api/directors/` `POST` (name) add a new director
 
   
-## What I learned with this little project ☝
+## What I learned with this little project
 
 ### Laravel
 I have never used Laravel before, and I'm impressed with its power and its number of built-in tools. For this project I use:
