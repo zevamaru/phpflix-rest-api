@@ -1,6 +1,6 @@
 # PHPflix REST API
 
-This project started as a challenge for a job interview, and despite that I knew I was lacking some knowledge to do it, I decided to try hard, and I ended up [learning a LOT](#what-i-learned-with-this-little-project) in the process.
+This project started as a challenge for a job interview, and despite that I knew I was lacking some knowledge to do it, I decided to try hard, and I ended up [learning a lot](#what-i-learned-with-this-little-project) in the process.
 
 ## Steps for testing
 
@@ -125,7 +125,7 @@ In order to access these endpoints, you need add an authorization header (Bearer
     "name": "{name}",
     "season": "{season_number}",
     "tvshow": "{tvshow_name}",
-    "director": "{tvshow_name}"
+    "director": "{director_name}"
 }
 ```
 - `/api/episodes/` `POST` (name, number, season_id) adds an episode to a season
